@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+<!-- Title Section -->
+{% block title %}Food Me - Add Your Favorite Restaurant{% endblock title %}
+<!-- Content Section -->
+{% block content %} {% include 'nav_bar.html' %}
+<form action="" method="post">
+  {%csrf_token%}
+  <div id="forms" class="w3-cell-row w3-container">{{AddRestaurant}}</div>
+
+  <div id="tags" class="w3-container w3-green w3-margin w3-padding-16">
+    {{AddRestaurantTags}}
+  </div>
+  <div class="w3-container w3-row">
+    <input
+      type="submit"
+      value="Add Restaurant"
+      name="add"
+      class="w3-btn w3-green w3-round w3-xlarge"
+    />
+  </div>
+</form>
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %} {% load static %}
+<!-- Title Section -->
+{% block title %}Food Me - {{restaurant.name}}{% endblock title %}
+<!-- Content Section -->
+{% block content %}
+ 
+{% include 'nav_bar.html' %}
+
+<div class="w3-card-4 w3-margin">
+
+<header class="w3-container w3-green w3-center">
+  {% comment %} RESTAURANT NAME {% endcomment %}
+  <h1 class="card-title">{{restaurant.name|title}}</h1>
+</header>
+
+<div class="w3-container w3-center">
+  {% comment %} RESTAURANT INFO {% endcomment %}
+  <h4 class="">
+      {{restaurant.street_address|title}} {{restaurant.city|title}},
+      {{restaurant.state|upper}} {{restaurant.zip}}
+    </h4>
+    <h4>{{restaurant.phone}}</h4>
+    {% comment %} TAGS {% endcomment %} {% for tag in tags%}
+
+    <p class="w3-tag">{{tag}}</p>
+    {% endfor%}
+</div>
+<div class="w3-card-4">
+
+  {% comment %} ADD REVIEW {% endcomment %}
+<div class="w3-container w3-green">
+  <h2>Add New Review</h2>
+</div>
+
+<form class="w3-container w3-padding-16" action="{% url 'restaurant' restaurant_id %}" method="post">
+  {%csrf_token%}
+  <label>Review</label>
+  <input class="w3-input w3-hover-light-grey" type="text"  name="review">
+
+  <label>Rating</label>
+  <input class="w3-input w3-hover-light-grey"  name='rating' type="number" min="1" max="10" title="Rating from 1 to 10" />
+     <footer class="w3-container w3-padding-16">
+        <input type="submit" class="w3-button w3-green" value="Submit">
+     </footer>
+</form>
+
+</div>
+
+
+<div class="w3-container w3-padding-16">
+  {% comment %} REVIEWS {% endcomment %}
+    {% for comment in comments%}
+    <form 
+    action={%url 'comment' restaurant.id comment.id%} 
+    method="post" 
+    class="w3-margin w3-border w3-border-green w3-rounded w3-padding-16"
+    >
+        {%csrf_token%}
+        <label>Review</label>
+        <textarea class="w3-input w3-hover-light-grey" type="text"  name="review">{{comment.body}}</textarea>
+
+        <label>Rating</label>
+        <input class="w3-input w3-hover-light-grey" value={{comment.rating}} name='rating' type="number" min="1" max="10" title="Rating from 1 to 10" />
+         <footer class="w3-container w3-padding-16">
+              <button type="submit" class="w3-button w3-green" name="patch" title="Update review">Update</button> 
+              <button type="submit" class="w3-button w3-green" name="delete" title="Delete review">Delete</button>
+        </footer>
+    </form>
+{% comment %} 
+        <form action={%url 'comment' restaurant.id comment.id%} method="post" class="w3-margin">
+      {%csrf_token%}
+     <div class="w3-card-4">
+
+    <header class="w3-container w3-blue">
+            <label for="rating">
+        Rating:
+        <input type="input" name="rating" value={{comment.rating}} />
+      </label>
+    </header>
+
+    <div class="w3-container">
+       <textarea class="" name="content">{{comment.body}}</textarea>
+    </div>
+
+      <footer class="w3-container w3-blue">
+              <button type="submit" name="patch">Save </button> 
+              <button type="submit" name="delete">Delete</button>
+        </footer>
+    </form>
+  </div> {% endcomment %}
+  {% endfor%}
+</div>
+
+</div>
+
+{% endblock %}
+  <form action={%url 'comment' restaurant.id comment.id%} method="post">
+      {%csrf_token%}
+      <div>
+        <p class=""><span>Date Updated:  </span>{{comment.date_updated}}</p>
+      </div>
+      
+      <label for="content"> Review:
+        <textarea class="" name="content">{{comment.body}}</textarea>
+      </label>
+      <label for="rating">
+        Rating:
+        <input type="input" name="rating" value={{comment.rating}} />
+      </label>
+      <button type="submit" name="patch">Save Changes</button> 
+      <button type="submit" name="delete">Delete Review</button>
+    </form>
