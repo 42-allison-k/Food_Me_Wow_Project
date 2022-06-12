@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from datetime import date
 from django.views import View
 from food_review.models import Restaurant, Tag, TypeOfFood, Comment 
-from food_review.forms import AddRestaurant, AddRestaurantTags, AddRestaurantReview
+from food_review.forms import AddRestaurant, AddRestaurantTags
 
 
 def RenderRestaurant(request, restaurant_id):
@@ -48,8 +48,7 @@ class SearchView(View):
 
             return render(request, "search.html", context)
 
-class RestaurantProfile(View):
-    pass
+
 
 class AddRestaurantView(View):
     '''Add a restaurant'''
@@ -66,8 +65,8 @@ class AddRestaurantView(View):
             "state": request.POST["state"],
             "zip": request.POST["zip_code"],
             "phone": request.POST["phone_number"],
-            "type_food": TypeOfFood(id=int(request.POST["type_food"]))
-            
+            "type_food": TypeOfFood(id=int(request.POST["type_food"])),
+            "avg_rating": 10
         }
         new_restaurant = Restaurant.objects.create(**restaurant)
         new_restaurant.tags.set(request.POST.getlist("tag"))
