@@ -1,9 +1,10 @@
 from django.urls import path
-from food_review.views import HomePageView, SearchView, RestaurantProfile, AddRestaurantView, Comments
+from food_review.views import HomePageView, SearchView, RestaurantProfile, AddRestaurantView, Comments, RegisterView, LoginView
 
 urlpatterns = [
-   
-    path("", HomePageView.as_view(), name="home"),
+     path("", RegisterView.register_request, name="register"),
+     path("login", LoginView.login_request, name="login"),
+    path("home", HomePageView.as_view(), name="home"),
     path("search/", SearchView.as_view(), name='search'),
     path("restaurant/<int:restaurant_id>",
          RestaurantProfile.as_view(), name='restaurant'),

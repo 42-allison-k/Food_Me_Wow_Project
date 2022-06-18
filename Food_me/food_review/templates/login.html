@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}      
+
+
+<!--Login--> 
+<div class="w3-container">
+  <h1>Login</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ login_form }}
+    <button class="w3-btn w3-green w3-round w3-xlarge" type="submit">Login</button>
+  </form>
+  <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
+</div>
+
+{% endfor %}

@@ -1,0 +1,20 @@
+
+
+
+ {% extends 'base.html' %}
+ {% block content %} 
+
+        
+
+<!--Register--> 
+<div class="w3-container">
+	<h1>Register</h1>
+	<form method="POST">
+		{% csrf_token %}
+		{{form}}                    
+		<button class="w3-btn w3-green w3-round w3-xlarge" type="submit">Register</button>
+	</form>
+	<p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
+</div>
+
+{% endblock %}
