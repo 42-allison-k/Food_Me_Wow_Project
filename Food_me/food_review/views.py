@@ -3,6 +3,19 @@ from datetime import date
 from django.views import View
 from food_review.models import Restaurant, Tag, TypeOfFood, Comment 
 from food_review.forms import AddRestaurant, AddRestaurantTags
+from .forms import NewUserForm
+from django.contrib.auth import login, authenticate
+from django.contrib import messages #import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic 
+
+
+class SignUpView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "register.html" 
+
 
 
 def RenderRestaurant(request, restaurant_id):
@@ -66,7 +79,7 @@ class AddRestaurantView(View):
             "zip": request.POST["zip_code"],
             "phone": request.POST["phone_number"],
             "type_food": TypeOfFood(id=int(request.POST["type_food"])),
-            "avg_rating": 10
+            
         }
         new_restaurant = Restaurant.objects.create(**restaurant)
         new_restaurant.tags.set(request.POST.getlist("tag"))
