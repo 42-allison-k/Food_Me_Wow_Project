@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from datetime import date
 from django.views import View
+# from jmespath import search
 from food_review.models import Restaurant, Tag, TypeOfFood, Comment 
 from food_review.forms import AddRestaurant, AddRestaurantTags
 from .forms import NewUserForm
@@ -9,6 +10,7 @@ from django.contrib import messages #import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic 
+from django.contrib.auth.models import User
 
 
 class SignUpView(generic.CreateView):
@@ -35,7 +37,21 @@ def RenderRestaurant(request, restaurant_id):
 # Create your views here.
 class HomePageView(View):
     def get(self, request):
-        return render(request, "index.html")
+        user_restaurants = Comment.objects.filter(
+            user=request.user).prefetch_related("restaurant").values_list("id", flat=True)
+        
+        user_restaurant_ids = (
+            Comment.objects.filter(user=request.user)
+            .select_related("restaurants")
+            .values_list("restaurant_id", flat=True)
+        )
+        context = {
+            "user_restaurants": user_restaurants,
+            "user_restaurant_ids": user_restaurant_ids
+        }
+        
+        
+        return render(request, "index.html", context)
 
 class SearchView(View):
     '''Search for a restaurant'''
