@@ -5,6 +5,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms import CharField 
+from django.contrib.auth.models import User
 
 # ------------------------------------------------------------
 # -------------------- TYPE OF FOOD --------------------------
@@ -119,6 +120,12 @@ class Comment(models.Model):
         Restaurant,
         on_delete=models.CASCADE,
         help_text="The Restaurant that the review is for."
+    )
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        null = False,
+        help_text="The user who wrote the comment"
     )
 
     # Return a string
