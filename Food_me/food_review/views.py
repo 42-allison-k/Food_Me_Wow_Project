@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic 
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class SignUpView(generic.CreateView):
@@ -35,27 +36,31 @@ def RenderRestaurant(request, restaurant_id):
             "comments": comments
         })
 # Create your views here.
-class HomePageView(View):
+class HomePageView(LoginRequiredMixin, View):
+    login_url = "/login/"
+    
     def get(self, request):
-        user_restaurants = Comment.objects.filter(
-            user=request.user).prefetch_related("restaurant").values_list("id", flat=True)
         
-        user_restaurant_ids = (
+        
+        user_restaurant_info = (
             Comment.objects.filter(user=request.user)
             .select_related("restaurants")
-            .values_list("restaurant_id", flat=True)
+            .values("restaurant_id", "restaurant__name")
         )
+        
         context = {
-            "user_restaurants": user_restaurants,
-            "user_restaurant_ids": user_restaurant_ids
+            "user_restaurant_info": user_restaurant_info
         }
         
-        
+        # if User.is_authenticated():
+        #     return render(request, "index.html", context)
+        # else:
+        #     return None
         return render(request, "index.html", context)
 
 class SearchView(View):
     '''Search for a restaurant'''
-
+    
     def get(self, request):
 
         try:
@@ -81,11 +86,13 @@ class SearchView(View):
 
 class AddRestaurantView(View):
     '''Add a restaurant'''
-
+    
+    
     def get(self, request):
         tags = Tag.objects.all()
         return render(request, "add_restaurant.html", {"AddRestaurant": AddRestaurant, "tags": tags,  "AddRestaurantTags": AddRestaurantTags})
-
+    
+    
     def post(self, request):
         restaurant = {
             "name": request.POST["resturant_name"],
@@ -106,23 +113,27 @@ class AddRestaurantView(View):
     
 class RestaurantProfile(View):
     '''View comments and details of restaurant'''
-
+    
+    
     def get(self, request, restaurant_id):
         return RenderRestaurant(request, restaurant_id)
-
+    
+    
     def post(self, request, restaurant_id):
         comment = {
             'body': request.POST['review'],
             'rating': request.POST['rating'],
             'date_updated': date.today(),
-            'restaurant_id': restaurant_id
+            'restaurant_id': restaurant_id,
+            'user_id': request.user.id,
         }
         Comment.objects.create(**comment)
         return RenderRestaurant(request, restaurant_id)    
 
 class Comments(View):
     '''Modifying comments of a restaurant'''
-
+    
+    
     def post(self, request, restaurant_id, comment_id):
 
         comment = Comment.objects.get(pk=comment_id)
