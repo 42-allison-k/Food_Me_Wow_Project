@@ -1,16 +1,11 @@
 from django.shortcuts import render, redirect
 from datetime import date
 from django.views import View
-# from jmespath import search
 from food_review.models import Restaurant, Tag, TypeOfFood, Comment 
 from food_review.forms import AddRestaurant, AddRestaurantTags
-from .forms import NewUserForm
-from django.contrib.auth import login, authenticate
-from django.contrib import messages #import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic 
-from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
