@@ -4,15 +4,16 @@
 
 <!-- Content Section -->
 {% block content %} {% include 'nav_bar.html' %}
+<div class="w3-pale-green">
 <header
-  class="w3-container w3-green w3-cell w3-center w3-cell-middle"
+  class="w3-container w3-green w3-cell w3-center w3-cell-middle w3-bottombar w3-topbar w3-border-brown"
   style="width: 100vw; height: 20vh"
 >
-  <h1 style="font-size: 5rem">Search</h1>
-  <h3>through all restaurants</h3>
+  <h1 class="w3-animate-zoom" style="font-size: 8rem">Search</h1>
+  <h3 class="w3-animate-zoom">through all restaurants</h3>
 </header>
 
-<form action="{% url 'search' %}" method="get" class="w3-margin-top">
+<form action="{% url 'search' %}" method="get" class="w3-margin-top w3-border w3-border-brown">
     <div
       class="w3-cell w3-center w3-cell-middle"
       style="width: 100vw; font-size:1.5rem;"
@@ -35,12 +36,12 @@ style="display:flex; flex-direction:column; justify-content:center; align-items:
 
   {% for restaurant in restaurants %}
   {% comment %} CARDS {% endcomment %}
-  <div class="w3-card-4 w3-round w3-margin-top" style="width:30vw">
+  <div class="w3-card-4 w3-round w3-margin-top w3-border w3-border-brown" style="width:40vw">
     <header 
     class="w3-display-container w3-green" 
     style="height:100px;">
       <h2 
-      class="w3-display-middle">{{ restaurant.name|capfirst}}</h2>
+      class="w3-display-middle w3-center">{{ restaurant.name|capfirst}}</h2>
       <p 
       class="w3-display-right w3-margin-right" 
       title="Average Rating of Restaurant">
@@ -54,15 +55,19 @@ style="display:flex; flex-direction:column; justify-content:center; align-items:
         {{ restaurant.city|upper}}, {{ restaurant.state|upper}}  {{restaurant.zip}}
       </p>
       <p class="card-text">{{ restaurant.phone}}</p>
+      {% for tag in tags %}
+      <p class="w3-tag">{{tag}}</p>
+      {% endfor %}
 </div>
 
 
-<a href="{% url 'restaurant' restaurant.id %}" class="w3-button w3-green w3-large w3-block"
+<a href="{% url 'restaurant' restaurant.id %}" class="w3-button w3-green w3-hover-pale-green w3-large w3-block"
         >More Info</a
       >
 
 
 </div>
 {% endfor %} {% endblock content %}
+</div>
 </div>
 </div>
