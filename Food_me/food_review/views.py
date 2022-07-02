@@ -39,18 +39,14 @@ class HomePageView(LoginRequiredMixin, View):
         
         user_restaurant_info = (
             Comment.objects.filter(user=request.user)
-            .select_related("restaurants")
-            .values("restaurant_id", "restaurant__name")
+            .select_related("restaurants", "comments")
+            .values("restaurant_id", "restaurant__name", "rating")
         )
         
         context = {
             "user_restaurant_info": user_restaurant_info
         }
         
-        # if User.is_authenticated():
-        #     return render(request, "index.html", context)
-        # else:
-        #     return None
         return render(request, "index.html", context)
 
 class SearchView(View):

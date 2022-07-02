@@ -3,10 +3,12 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
+<div class="w3-pale-green">
   <h2 class="w3-container w3-green w3-center">Create a Food Me account</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button class="w3-block w3-green w3-xlarge" type="submit">Sign Up</button>
   </form>
+</div>
 {% endblock %}
